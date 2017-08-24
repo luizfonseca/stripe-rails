@@ -2,10 +2,12 @@ require 'stripe/event'
 module Stripe
   module EventDispatch
     def dispatch_stripe_event(params)
-      retrieve_stripe_event(params) do |evt|
+      
+      retrieve_stripe_event(params.to_unsafe_h) do |evt|
         target = evt.data.object
         ::Stripe::Callbacks.run_callbacks(evt, target)
       end
+      
     end
 
     def retrieve_stripe_event(params)
